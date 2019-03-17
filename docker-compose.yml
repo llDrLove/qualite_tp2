@@ -1,20 +1,27 @@
 version: '3'
 services:
+  lb:
+    image: eeacms/haproxy
+    ports:
+      - "80:80"
+      - "1936:1936"
+    links:
+      - jguweka
+    restart: always
   mongo:
     image: mongo
     container_name: jguwekamongo
     restart: always
   jguweka:
     image: jguweka/jguweka:OAS3
-    container_name: jguwekarest
     restart: always
     links:
       - "mongo:mongodb"
     ports:
-      - "8081:8080"
+      - "8080:8080"
+      
     depends_on:
       - mongo
     labels:
-      - "service-name:jguweka"
       - "service-type:app-srv"
       - "environment:test"
